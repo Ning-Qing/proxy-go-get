@@ -14,7 +14,7 @@ const tpl = `
 `
 
 var addr = flag.String("listen", "127.0.0.1:9090", "listening address")
-var host = flag.String("host", "git.vonechain.com", "listening address")
+var host = flag.String("host", "git.vonechain.com", "host")
 
 func main() {
 	flag.Parse()
