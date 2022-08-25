@@ -10,15 +10,16 @@ import (
 )
 
 const tpl = `
-<meta name="go-import" content="%s git ssh://git@git.vonechain.com/%s">
+<meta name="go-import" content="%s git ssh://git@%s/%s">
 `
 
 var addr = flag.String("listen", "127.0.0.1:9090", "listening address")
+var host = flag.String("host", "git.vonechain.com", "listening address")
 
 func main() {
 	flag.Parse()
 	http.HandleFunc("/", handleGoGet)
-	log.Println("listen ", addr)
+	log.Println("listen ", *addr)
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {
 		log.Fatal("ListenAndServer: ", err)
@@ -27,9 +28,8 @@ func main() {
 
 func handleGoGet(w http.ResponseWriter, r *http.Request) {
 	pkgPath := packagePath(r.URL.Path)
-	host := r.Host
-	root := fmt.Sprintf("%s/%s", host, pkgPath)
-	_, _ = fmt.Fprintf(w, tpl, root, pkgPath)
+	root := fmt.Sprintf("%s/%s", *host, pkgPath)
+	_, _ = fmt.Fprintf(w, tpl, root, *host, pkgPath)
 }
 
 func packagePath(p string) string {
